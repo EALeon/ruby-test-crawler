@@ -16,13 +16,15 @@ class TestCrawler
     find('a.submenu.first').click
 
     all('.shortDescription').each do |short_description|
-      keys   = short_description.all('strong').map{ |s| s.text.strip.delete(':') }
-      values = short_description.text.split(':').map(&:strip)
+      keys    = short_description.all('strong').map{ |s| s.text.strip.delete(':') }
+      val_str = short_description.text
+
+      keys.each{|s| val_str.gsub!(s, '')}
+      values  = val_str.split(':').map(&:strip)
+
       values.slice!(0)
       product = {}
-      keys.each_with_index do |key, i|
-        product[key] = values[i]
-      end
+      keys.each_with_index {|key, i| product[key] = values[i] }
       products << product
     end
     products
